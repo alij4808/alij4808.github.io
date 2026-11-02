@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="54" height="22" viewBox="0 0 54 22" role="img" aria-label="SQL">
+  <title>SQL</title>
+  <!-- Original generic database symbol for SQL, which has no single product logo. -->
+  
+  <svg x="0" y="2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F6C9F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+  <text x="24" y="15" fill="#bbbbbb" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="13" font-weight="500">SQL</text>
+</svg>
