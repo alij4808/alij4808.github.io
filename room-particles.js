@@ -10,7 +10,6 @@
     canvas.setAttribute('aria-hidden', 'true');
     holder.appendChild(canvas);
     const ctx = canvas.getContext('2d', { alpha: false });
-    if(!ctx){canvas.remove();throw new Error('Canvas is unavailable.');}
     const media = matchMedia('(prefers-reduced-motion: reduce)');
     const particles = [], wires = [], features = [], buttons = {}, dust = [], stars = [];
     let seed = 8726381;
@@ -269,6 +268,7 @@
     function positionButtons(){for(const key of Object.keys(buttons)){const [x,y,w,h]=clusterRects[key],b=buttons[key];b.style.left=(ox+x*fit)+'px';b.style.top=(oy+y*fit)+'px';b.style.width=w*fit+'px';b.style.height=h*fit+'px';b.style.pointerEvents=active?'none':'auto';}}
     for(const key of ['serious','fun','neuro']){
       const button=document.createElement('button');button.type='button';button.className='scene-hotspot';button.dataset.zone=key;button.setAttribute('aria-label',`Explore ${key==='fun'?'just-for-fun':key==='neuro'?'neuroscience':'serious'} projects`);
+      const label=document.createElement('span');label.className='hotspot-label';label.textContent=LABELS[key];button.appendChild(label);
       if(key==='fun')button.style.clipPath='polygon(5% 0,90% 0,100% 76%,82% 100%,64% 92%,66% 70%,0 76%)';
       if(key==='serious')button.style.clipPath='polygon(0 10%,85% 0,100% 78%,82% 100%,10% 98%)';
       if(key==='neuro')button.style.clipPath='polygon(8% 16%,74% 0,93% 0,100% 40%,95% 88%,11% 100%,0 55%)';
@@ -330,11 +330,7 @@
       ctx.globalAlpha=1;
     }
     raf=requestAnimationFrame(draw);
-    function setPaused(value){
-      if(value){cancelAnimationFrame(raf);raf=0;}
-      else if(!disposed&&!raf){last=performance.now();raf=requestAnimationFrame(draw);}
-    }
-    return {enter,leave,setHover,setPaused,dispose(){disposed=true;cancelAnimationFrame(raf);ro.disconnect();holder.removeEventListener('pointermove',onPointer);holder.removeEventListener('pointerleave',onLeave);canvas.remove();Object.values(buttons).forEach(b=>b.remove());if(transition)transition.resolve();},canvas,buttons,particleCount:particles.length};
+    return {enter,leave,setHover,dispose(){disposed=true;cancelAnimationFrame(raf);ro.disconnect();holder.removeEventListener('pointermove',onPointer);holder.removeEventListener('pointerleave',onLeave);canvas.remove();Object.values(buttons).forEach(b=>b.remove());if(transition)transition.resolve();},canvas,buttons,particleCount:particles.length};
   }
   window.createParticleRoom=createParticleRoom;
 })();
