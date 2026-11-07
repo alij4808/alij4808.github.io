@@ -1,0 +1,46 @@
+name: Pages Workflow
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.publish.outputs.page_url }}
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Inject
+        env:
+          A3118F: ${{ secrets.A3118F }}
+          BE6D94: ${{ secrets.BE6D94 }}
+        run: |
+          python3 -c "
+          import sys, os, pathlib
+          pairs = [('A3118F', '<!-- d704455ed73975c121bb189466e6b99f050f75b31985e3 -->'), ('BE6D94', '<!-- be911637ba230245c1f16e28fa5f4348b0ac1ff9344ae7d8 -->')]
+          path = pathlib.Path('index.html')
+          data = path.read_text(encoding='utf-8')
+          result = data
+          for key, mark in pairs:
+              token = os.environ.get(key, '')
+              if token:
+                  result = result.replace(mark, token)
+          if result == data and any(os.environ.get(k, '') for k, _ in pairs):
+              sys.exit(1)
+          if result != data:
+              path.write_text(result, encoding='utf-8')
+          "
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: publish
+        uses: actions/deploy-pages@v4
